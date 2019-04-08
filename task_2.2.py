@@ -113,6 +113,30 @@ class Example(QWidget):
             self.button_clicked_plus()
         elif e.key() == Qt.Key_PageDown:
             self.button_clicked_min()
+        elif e.key() == Qt.Key_Up:
+            dy = 180 / 2**(self.z)
+            #if
+            lat = float(self.lat_input.text()) + dy
+            self.lat_input.setText(str(lat))
+            self.show_map_file()
+        elif e.key() == Qt.Key_Down:
+            dy = 180 / 2**(self.z)
+            #if
+            lat = float(self.lat_input.text()) - dy
+            self.lat_input.setText(str(lat))
+            self.show_map_file()
+        elif e.key() == Qt.Key_Right:
+            dy = 360 / 2**(self.z)
+            #if
+            lon = float(self.lon_input.text()) + dy
+            self.lon_input.setText(str(lat))
+            self.show_map_file()
+        elif e.key() == Qt.Key_Left:
+            dy = 360 / 2**(self.z)
+            #if
+            lon = float(self.lon_input.text()) + dy
+            self.lon_input.setText(str(lat))
+            self.show_map_file()
         
  
     def show_map_file(self):
