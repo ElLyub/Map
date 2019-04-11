@@ -83,6 +83,20 @@ def find_org(ll, spn, request, locale="ru_RU"):
     return organization
 
 
+def get_fullAdr(address):
+    toponym = geocode(address)
+    if not toponym:
+        return (None,None)
+    toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
+    return toponym_address
+
+def get_index(address):
+    toponym = geocode(address)
+    if not toponym:
+        return (None,None)
+    toponym_index = toponym["metaDataProperty"]["GeocoderMetaData"]["Address"]['postal_code']
+    return toponym_index
+
 def get_file_map(ll_spn=None, map_type="map", add_params=None):
     if ll_spn:
         map_request = "http://static-maps.yandex.ru/1.x/?{ll_spn}&l={map_type}".format(**locals())
