@@ -146,7 +146,6 @@ class Example(QWidget):
             self.flag = True
         else:
             self.flag = False
-        self.show_map_file()
     
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_PageUp:
@@ -196,7 +195,8 @@ class Example(QWidget):
                 self.index = ""
         else:
             self.index = ""
-        
+        self.label_3.setText(self.SF + "; " + self.index)
+    
         map_locations = "ll=" + ",".join([lon,lat])# + "&spn=1.0,1.0"
         map_type = self.map_type
         map_param = "z={0}&size=400,400{1}".format(str(self.z), self.point)
