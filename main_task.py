@@ -6,8 +6,8 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
  
 W = 400
-H = 520
-dMenu = 50 #для кнопок setDisable(True)
+H = 580
+dMenu = 20 #для кнопок setDisable(True)
 m = 10 #отступ
 map_w, map_h = W -2 * m, H - dMenu - 2 * m
 
@@ -31,6 +31,11 @@ class Example(QWidget):
         self.label = QLabel(self)
         self.label.setText("Введите координаты центра карты или название объекта:")
         self.label.move(10, 10)
+
+        self.label_2 = QLabel(self)
+        self.label_2.setText("Адрес объекта: ")
+        self.label_2.resize(map_w, 25)
+        self.label_2.move(10, 88)
  
         self.lat_input = QLineEdit(self)
         self.lat_input.resize(80,25)
@@ -69,8 +74,8 @@ class Example(QWidget):
         self.btn_3.clicked.connect(self.button_clicked_min)
 
         self.btn_5 = QPushButton('Сброс поискового результата', self)
-        self.btn_5.resize(W // 4 * 2.5,20)
-        self.btn_5.move(m, 88)
+        self.btn_5.resize(W // 4 * 2.5, 20)
+        self.btn_5.move(m, 130)
         self.btn_5.clicked.connect(self.del_point)
         self.btn_5.setDisabled(True)
 
@@ -84,6 +89,7 @@ class Example(QWidget):
         self.z = 8
         self.map_type = "map"
         self.point = ""
+        self.SF = ""
         #setText
 
     def onChanged(self, text):
@@ -93,6 +99,7 @@ class Example(QWidget):
 
     def search_address(self):
         address = self.search_input.text()
+        self.SF = get_fullAdr(address)
         lon, lat = get_coordinates(address)
         org_point = "{0},{1}".format(lon, lat)
         self.point = "&pt={0},pm2dgl".format(org_point)
@@ -105,6 +112,7 @@ class Example(QWidget):
     def del_point(self):
         self.point = ""
         self.show_map_file()
+        self.label_2.setText("Адрес объекта: ")
             
     def button_clicked_plus(self):
         if self.z < 19:
@@ -159,6 +167,9 @@ class Example(QWidget):
         # Показать карту
         lon = self.lon_input.text()
         lat = self.lat_input.text()
+        for_req = ",".join([lon,lat])
+        self.SF = get_fullAdr(for_req)
+        self.label_2.setText("Адрес объекта: " + self.SF)
         
         map_locations = "ll=" + ",".join([lon,lat])# + "&spn=1.0,1.0"
         map_type = self.map_type
@@ -177,3 +188,4 @@ if __name__ == '__main__':
     ex = Example()
     ex.show()
     sys.exit(app.exec())
+
