@@ -190,10 +190,12 @@ class Example(QWidget):
         for_req = ",".join([lon,lat])
         self.SF = get_fullAdr(for_req)
         if self.flag:
-            self.index = get_index(for_req)
+            try:
+                self.index = get_index(for_req)
+            except:
+                self.index = ""
         else:
             self.index = ""
-        self.label_3.setText(self.SF + self.index)
         
         map_locations = "ll=" + ",".join([lon,lat])# + "&spn=1.0,1.0"
         map_type = self.map_type
