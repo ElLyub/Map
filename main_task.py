@@ -126,28 +126,32 @@ class Example(QWidget):
         elif e.key() == Qt.Key_PageDown:
             self.button_clicked_min()
         elif e.key() == Qt.Key_Up:
-            dy = (180 / 2**(self.z))*1.75
-            #if
-            lat = float(self.lat_input.text()) + dy
+            dy = 180 / 2**(self.z) * (map_h / 256)
+            lat = float(self.lat_input.text())
+            if lat < (90 - dy):
+                lat += dy
             self.lat_input.setText(str(lat))
             self.show_map_file()
         elif e.key() == Qt.Key_Down:
-            dy = (180 / 2**(self.z))*1.75
-            #if
-            lat = float(self.lat_input.text()) - dy
+            dy = 180 / 2**(self.z) * (map_h / 256)
+            lat = float(self.lat_input.text())
+            if lat > (-90 + dy):
+                lat -= dy
             self.lat_input.setText(str(lat))
             self.show_map_file()
         elif e.key() == Qt.Key_Right:
-            dy = 360 / 2**(self.z)
-            #if
-            lon = float(self.lon_input.text()) + dy
-            self.lon_input.setText(str(lat))
+            dy = 360 / 2**(self.z) * (map_w / 256)
+            lon = float(self.lon_input.text())
+            if lon < (180 + dy):
+                lon += dy
+            self.lon_input.setText(str(lon))
             self.show_map_file()
         elif e.key() == Qt.Key_Left:
-            dy = 360 / 2**(self.z)
-            #if
-            lon = float(self.lon_input.text()) + dy
-            self.lon_input.setText(str(lat))
+            dy = 360 / 2**(self.z) * (map_w / 256)
+            lon = float(self.lon_input.text())
+            if lon > (-180 + dy):
+                lon -= dy
+            self.lon_input.setText(str(lon))
             self.show_map_file()
         
  
