@@ -33,9 +33,14 @@ class Example(QWidget):
         self.label.move(10, 10)
 
         self.label_2 = QLabel(self)
-        self.label_2.setText("Адрес объекта: ")
+        self.label_2.setText("Адрес объекта")
         self.label_2.resize(map_w, 25)
         self.label_2.move(10, 88)
+
+        self.label_3 = QLabel(self)
+        self.label_3.setText("")
+        self.label_3.resize(map_w, 25)
+        self.label_3.move(10, 105)
  
         self.lat_input = QLineEdit(self)
         self.lat_input.resize(80,25)
@@ -84,12 +89,20 @@ class Example(QWidget):
         self.combo.addItems(["map", "sat", "sat,skl"])
         self.combo.move(W // 2 - 10, 30)
         self.combo.activated[str].connect(self.onActivated)
+
+        self.combo_ind = QComboBox(self)
+        self.combo_ind.resize(85, 20)
+        self.combo_ind.addItems(["без индекса", "с индексом"])
+        self.combo_ind.move(98, 90)
+        self.combo_ind.activated[str].connect(self.onActivated_2)
          
         self.count = 0
         self.z = 8
         self.map_type = "map"
         self.point = ""
         self.SF = ""
+        self.index = ""
+        self.flag = False
         #setText
 
     def onChanged(self, text):
@@ -99,7 +112,7 @@ class Example(QWidget):
 
     def search_address(self):
         address = self.search_input.text()
-        self.SF = get_fullAdr(address)
+        #self.SF = get_fullAdr(address)
         lon, lat = get_coordinates(address)
         org_point = "{0},{1}".format(lon, lat)
         self.point = "&pt={0},pm2dgl".format(org_point)
@@ -112,7 +125,7 @@ class Example(QWidget):
     def del_point(self):
         self.point = ""
         self.show_map_file()
-        self.label_2.setText("Адрес объекта: ")
+        self.label_3.setText("")
             
     def button_clicked_plus(self):
         if self.z < 19:
@@ -128,6 +141,13 @@ class Example(QWidget):
         self.map_type = text
         self.show_map_file()
 
+    def onActivated_2(self, text):
+        if text == "с индексом":
+            self.flag = True
+        else:
+            self.flag = False
+        self.show_map_file()
+    
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_PageUp:
             self.button_clicked_plus()
@@ -169,7 +189,11 @@ class Example(QWidget):
         lat = self.lat_input.text()
         for_req = ",".join([lon,lat])
         self.SF = get_fullAdr(for_req)
-        self.label_2.setText("Адрес объекта: " + self.SF)
+        if self.flag:
+            self.index = get_index(for_req)
+        else:
+            self.index = ""
+        self.label_3.setText(self.SF + self.index)
         
         map_locations = "ll=" + ",".join([lon,lat])# + "&spn=1.0,1.0"
         map_type = self.map_type
@@ -188,4 +212,3 @@ if __name__ == '__main__':
     ex = Example()
     ex.show()
     sys.exit(app.exec())
-
